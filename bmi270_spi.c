@@ -1,3 +1,14 @@
+/*
+Simple program to demonstrate communicating with a BMI270 over SPI on an MSP430.
+This example uses the MSP-EXP430FR6989 Launchpad and its EUSCI_B0 SPI interface,
+which has the following pinout:
+
+P1.4: UCB0CLK (serial clock)
+P1.5: CSB (chip select bar)
+P1.6: UCB0SIMO (peripheral in, controller out)
+P1.7: UCB0SOMI (peripheral out, controller in)
+*/
+
 #include <driverlib.h>
 #include "BMI270_SensorAPI/bmi270.h"
 #include "bmi270_spi.h"
@@ -129,7 +140,7 @@ void USCI_B0_ISR (void)
                     }
                     break;
                 case RECEIVING:
-                    // for every byte received, we need to transmit a dummy byte to get
+                    // for every byte we expect to receive, we need to transmit a dummy byte to get
                     // the clock going for 8 cycles
                     // the BMI270 will transfer data to us during those cycles, and then the UCRXIFG
                     // interrupt will fire and we can read it

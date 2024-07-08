@@ -3,10 +3,10 @@ Simple program to demonstrate communicating with a BMI270 over SPI on an MSP430.
 This example uses the MSP-EXP430FR6989 Launchpad and its EUSCI_B0 SPI interface,
 which has the following pinout:
 
-P1.4: UCB0CLK (serial clock)
-P1.5: CSB (chip select bar)
-P1.6: UCB0SIMO (peripheral in, controller out)
-P1.7: UCB0SOMI (peripheral out, controller in)
+P1.4: UCB0CLK (serial clock) -> BMI270 pin 13
+P1.5: CSB (chip select bar) -> BMI270 pin 12
+P1.6: UCB0SIMO (peripheral in, controller out) -> BMI270 pin 14
+P1.7: UCB0SOMI (peripheral out, controller in) -> BMI270 pin 1
 */
 
 #include <driverlib.h>

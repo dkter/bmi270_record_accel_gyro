@@ -13,6 +13,7 @@ P1.7: UCB0SOMI (peripheral out, controller in) -> BMI270 pin 1
 #include <driverlib.h>
 #include "BMI270_SensorAPI/bmi270.h"
 #include "bmi270_spi.h"
+#include "util.h"
 
 void init_spi() {
     // Set pins P1.6 and P1.4 as UCB0SIMO and UCB0CLK respectively
@@ -80,4 +81,5 @@ int main(void) {
 
     int result = bmi270_init(&bmi);
     printf("bmi270_init result: %d\n", result);
+    bmi2_error_codes_print_result(result);
 }

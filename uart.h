@@ -4,4 +4,4 @@
 #include <stddef.h>
 #include <driverlib.h>
 
-size_t write(int handle, const unsigned char *buf, size_t bufSize);
+size_t uart_write(int handle, const unsigned char *buf, size_t bufSize);

@@ -12,7 +12,7 @@ P1.7: UCB0SOMI (peripheral out, controller in) -> BMI270 pin 1
 #include <stdio.h>
 #include "eusci_a_uart.h"
 #include "gpio.h"
-#include "printf.h"
+#include "uart.h"
 #include <driverlib.h>
 #include <math.h>
 #include "BMI270_SensorAPI/bmi270.h"
@@ -253,7 +253,7 @@ int main(void) {
 
                 len = sprintf(output,
                     "\nData set, Time, Accel Range, Acc_Raw_X, Acc_Raw_Y, Acc_Raw_Z, Gyr_Raw_X, Gyr_Raw_Y, Gyr_Raw_Z\r\n");
-                write(0, output, len);
+                uart_write(0, output, len);
 
                 while (indx < limit)
                 {
@@ -297,7 +297,7 @@ int main(void) {
                             //    gyr_y,
                             //    gyr_z
                                );
-                    write(0, output, len);
+                    uart_write(0, output, len);
                 }
             }
         }

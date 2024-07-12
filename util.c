@@ -1,5 +1,4 @@
 #include <stdio.h>
-#include "printf.h"
 #include "util.h"
 #include "BMI270_SensorAPI/bmi2_defs.h"
 

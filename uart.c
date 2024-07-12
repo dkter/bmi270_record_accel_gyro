@@ -1,12 +1,10 @@
-#include "printf.h"
+#include "uart.h"
 
 volatile static const unsigned char* print_buf;
 volatile static size_t print_buf_size;
 volatile static size_t print_buf_idx;
 
-//_STD_BEGIN
-//#pragma module_name = "?__write"
-size_t /*__*/write(int handle, const unsigned char *buf, size_t bufSize) {
+size_t uart_write(int handle, const unsigned char *buf, size_t bufSize) {
     // while (print_buf_idx < print_buf_size);
     if (buf == NULL) {
         return 0;
@@ -24,7 +22,6 @@ size_t /*__*/write(int handle, const unsigned char *buf, size_t bufSize) {
 
     return bufSize;
 }
-//_STD_END
 
 
 #if defined(__TI_COMPILER_VERSION__) || defined(__IAR_SYSTEMS_ICC__)

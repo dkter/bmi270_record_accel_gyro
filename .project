@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>msp430_bmi270_spi_example</name>
+	<name>bmi270_accel_gyro</name>
 	<comment></comment>
 	<projects>
 	</projects>

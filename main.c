@@ -280,10 +280,10 @@ int main(void) {
                 }
 
                 for (indx = 0; indx < DATA_LEN; indx += 1) {
-                    len = sprintf(output, "%lu, %lu, %d, %d, %d, %d,  %d, %d, %d\r\n",
+                    len = sprintf(output, "%lu, %lu,  %d, %d, %d,  %d, %d, %d\r\n",
                                indx,
                                sensor_data[indx].sens_time,
-                               config.cfg.acc.range,
+                               //config.cfg.acc.range,
                                sensor_data[indx].acc.x,
                                sensor_data[indx].acc.y,
                                sensor_data[indx].acc.z,

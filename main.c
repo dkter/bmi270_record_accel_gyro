@@ -104,7 +104,7 @@ void init_spi() {
     EUSCI_B_SPI_initMasterParam param = {
         .selectClockSource = EUSCI_B_SPI_CLOCKSOURCE_SMCLK,
         .clockSourceFrequency = CS_getSMCLK(),
-        .desiredSpiClock = 1000000,
+        .desiredSpiClock = 2000000,
         // Per the datasheet, the BMI270 supports either 00 (the current setting) or 11 for clockPhase and clockPolarity.
         // This is automatically detected by the BMI270.
         .clockPhase = EUSCI_B_SPI_PHASE_DATA_CHANGED_ONFIRST_CAPTURED_ON_NEXT,
@@ -119,12 +119,12 @@ void init_spi() {
 }
 
 void init_clk() {
-    // Set DCO Frequency to 4 MHz
-    CS_setDCOFreq(CS_DCORSEL_0, CS_DCOFSEL_3);
+    // Set DCO Frequency to 8 MHz
+    CS_setDCOFreq(CS_DCORSEL_1, CS_DCOFSEL_3);
 
     // Configure MCLK, SMCLK to be sourced by DCOCLK
-    CS_initClockSignal(CS_MCLK,  CS_DCOCLK_SELECT,  CS_CLOCK_DIVIDER_1); // 4 MHz
-    CS_initClockSignal(CS_SMCLK, CS_DCOCLK_SELECT,  CS_CLOCK_DIVIDER_1); // 4 MHz
+    CS_initClockSignal(CS_MCLK,  CS_DCOCLK_SELECT,  CS_CLOCK_DIVIDER_1); // 8 MHz
+    CS_initClockSignal(CS_SMCLK, CS_DCOCLK_SELECT,  CS_CLOCK_DIVIDER_1); // 8 MHz
 
     //Set external clock frequency to 32.768 KHz
     // CS_setExternalClockSource(32768, 0);
@@ -141,14 +141,14 @@ void init_uart() {
     // Configure UART
     EUSCI_A_UART_initParam param = {0};
     param.selectClockSource = EUSCI_A_UART_CLOCKSOURCE_SMCLK;
-    param.clockPrescalar = 2;
-    param.firstModReg = 2;
-    param.secondModReg = 0xDD;
+    param.clockPrescalar = 4;  // UCBRx
+    param.firstModReg = 5;  // UCBRFx
+    param.secondModReg = 0x55;  // UCBRSx
     param.parity = EUSCI_A_UART_NO_PARITY;
     param.msborLsbFirst = EUSCI_A_UART_LSB_FIRST;
     param.numberofStopBits = EUSCI_A_UART_ONE_STOP_BIT;
     param.uartMode = EUSCI_A_UART_MODE;
-    param.overSampling = EUSCI_A_UART_OVERSAMPLING_BAUDRATE_GENERATION;
+    param.overSampling = EUSCI_A_UART_OVERSAMPLING_BAUDRATE_GENERATION; // OS16
 
     if (STATUS_FAIL == EUSCI_A_UART_init(EUSCI_A1_BASE, &param)) {
         return;
@@ -252,7 +252,7 @@ int main(void) {
                 bmi2_error_codes_print_result(rslt);
 
                 len = sprintf(output,
-                    "\nData set, Time, Accel Range, Acc_Raw_X, Acc_Raw_Y, Acc_Raw_Z, Gyr_Raw_X, Gyr_Raw_Y, Gyr_Raw_Z\r\n");
+                    "Data set, Time, Accel Range, Acc_Raw_X, Acc_Raw_Y, Acc_Raw_Z, Gyr_Raw_X, Gyr_Raw_Y, Gyr_Raw_Z\r\n");
                 uart_write(0, output, len);
 
                 while (indx < limit)

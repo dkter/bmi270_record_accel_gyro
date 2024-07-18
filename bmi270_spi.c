@@ -22,7 +22,7 @@ volatile static uint32_t rx_count;
 
 static uint32_t mclk_uhz;
 
-enum RwState { NONE, TRANSMITTING, RECEIVING };
+enum RwState { NONE, TRANSMITTING, RECEIVING, RECEIVING_REGTX };
 volatile static enum RwState rw_state = NONE;
 
 
@@ -41,7 +41,7 @@ BMI2_INTF_RETURN_TYPE bmi2_spi_read(uint8_t reg_addr, uint8_t *reg_data, uint32_
     rx_data = reg_data;
     rx_len = len;
     rx_count = 0;
-    rw_state = RECEIVING;
+    rw_state = RECEIVING_REGTX;
 
     GPIO_setOutputLowOnPin(GPIO_PORT_P1, GPIO_PIN5);    // Set CSB low to indicate transmission
     EUSCI_B_SPI_clearInterrupt(SPI_BASE, EUSCI_B_SPI_RECEIVE_INTERRUPT);
@@ -123,6 +123,10 @@ void USCI_B0_ISR (void)
                         __bic_SR_register_on_exit(LPM0_bits); // leave low power mode
                     }
                     break;
+                case RECEIVING_REGTX:
+                    // data has ended up in the receive buffer while transmitting the register address,
+                    // so clear the buffer
+                    EUSCI_B_SPI_receiveData(SPI_BASE);
                 default:
                     break;
             }
@@ -139,6 +143,8 @@ void USCI_B0_ISR (void)
                         __bic_SR_register_on_exit(LPM0_bits); // leave low power mode
                     }
                     break;
+                case RECEIVING_REGTX:
+                    rw_state = RECEIVING;
                 case RECEIVING:
                     // for every byte we expect to receive, we need to transmit a dummy byte to get
                     // the clock going for 8 cycles

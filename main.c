@@ -260,9 +260,9 @@ int main(void) {
                     rslt = bmi2_get_sensor_data(&sensor_data[indx], &bmi);
                     // bmi2_error_codes_print_result(rslt);
 
-                    // if ((rslt == BMI2_OK) && (sensor_data[indx].status & BMI2_DRDY_ACC) &&
-                    //     (sensor_data[indx].status & BMI2_DRDY_GYR))
-                    // {
+                    if ((rslt == BMI2_OK) && (sensor_data[indx].status & BMI2_DRDY_ACC) &&
+                        (sensor_data[indx].status & BMI2_DRDY_GYR))
+                    {
                         /* Converting lsb to meter per second squared for 16 bit accelerometer at 2G range. */
                         // acc_x = lsb_to_mps2(sensor_data.acc.x, (float)2, bmi.resolution);
                         // acc_y = lsb_to_mps2(sensor_data.acc.y, (float)2, bmi.resolution);
@@ -276,7 +276,7 @@ int main(void) {
                         
 
                         indx++;
-                    // }
+                    }
                 }
 
                 for (indx = 0; indx < DATA_LEN; indx += 1) {

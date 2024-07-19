@@ -251,9 +251,9 @@ int main(void) {
                 rslt = bmi2_get_sensor_config(&config, 1, &bmi);
                 bmi2_error_codes_print_result(rslt);
 
-                len = sprintf(output,
-                    "Data set, Time, Accel Range, Acc_Raw_X, Acc_Raw_Y, Acc_Raw_Z, Gyr_Raw_X, Gyr_Raw_Y, Gyr_Raw_Z\r\n");
-                uart_write(0, output, len);
+                // len = sprintf(output,
+                //     "Data set, Time, Accel Range, Acc_Raw_X, Acc_Raw_Y, Acc_Raw_Z, Gyr_Raw_X, Gyr_Raw_Y, Gyr_Raw_Z\r\n");
+                // uart_write(0, output, len);
 
                 while (indx < limit)
                 {
@@ -280,23 +280,40 @@ int main(void) {
                 }
 
                 for (indx = 0; indx < DATA_LEN; indx += 1) {
-                    len = sprintf(output, "%lu, %lu,  %d, %d, %d,  %d, %d, %d\r\n",
-                               indx,
-                               sensor_data[indx].sens_time,
-                               //config.cfg.acc.range,
-                               sensor_data[indx].acc.x,
-                               sensor_data[indx].acc.y,
-                               sensor_data[indx].acc.z,
-                            //    acc_x,
-                            //    acc_y,
-                            //    acc_z,
-                               sensor_data[indx].gyr.x,
-                               sensor_data[indx].gyr.y,
-                               sensor_data[indx].gyr.z
-                            //    gyr_x,
-                            //    gyr_y,
-                            //    gyr_z
-                               );
+                    // len = sprintf(output, "%lu, %lu,  %d, %d, %d,  %d, %d, %d\r\n",
+                    //            indx,
+                    //            sensor_data[indx].sens_time,
+                    //            //config.cfg.acc.range,
+                    //            sensor_data[indx].acc.x,
+                    //            sensor_data[indx].acc.y,
+                    //            sensor_data[indx].acc.z,
+                    //         //    acc_x,
+                    //         //    acc_y,
+                    //         //    acc_z,
+                    //            sensor_data[indx].gyr.x,
+                    //            sensor_data[indx].gyr.y,
+                    //            sensor_data[indx].gyr.z
+                    //         //    gyr_x,
+                    //         //    gyr_y,
+                    //         //    gyr_z
+                    //            );
+                    output[0] = indx & 0xff;
+                    output[1] = (indx >> 8) & 0xff;
+                    output[2] = sensor_data[indx].sens_time & 0xff;
+                    output[3] = (sensor_data[indx].sens_time >> 8) & 0xff;
+                    output[4] = sensor_data[indx].acc.x & 0xff;
+                    output[5] = sensor_data[indx].acc.x >> 8;
+                    output[6] = sensor_data[indx].acc.y & 0xff;
+                    output[7] = sensor_data[indx].acc.y >> 8;
+                    output[8] = sensor_data[indx].acc.z & 0xff;
+                    output[9] = sensor_data[indx].acc.z >> 8;
+                    output[10] = sensor_data[indx].gyr.x & 0xff;
+                    output[11] = sensor_data[indx].gyr.x >> 8;
+                    output[12] = sensor_data[indx].gyr.y & 0xff;
+                    output[13] = sensor_data[indx].gyr.y >> 8;
+                    output[14] = sensor_data[indx].gyr.z & 0xff;
+                    output[15] = sensor_data[indx].gyr.z >> 8;
+                    len = 16;
                     uart_write(0, output, len);
                 }
             }
